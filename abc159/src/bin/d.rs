@@ -81,8 +81,40 @@ fn main() {
 fn solve(src: &str) -> String {
     input! {
         source = src,
+        n:usize,
+        a:[usize;n],
     }
-    "".to_string()
+    let mut c_map = HashMap::<usize, usize>::with_capacity(n);
+    for ai in a.iter() {
+        let mut c = *c_map.get(ai).unwrap_or(&0);
+        c += 1;
+        c_map.insert(*ai, c);
+    }
+    let mut sum = 0;
+    for (_, &v) in c_map.iter() {
+        sum += c_2(v);
+    }
+    let mut answers = String::with_capacity(n * 2);
+    for ai in a.iter() {
+        let c = c_map[ai];
+        let b = c_2(c);
+        let c = c_2(c - 1);
+        let ans = sum - (b - c);
+        answers.push_str(&format!("{}\n", ans));
+    }
+    answers
+}
+
+fn c_2(v: usize) -> usize {
+    if v > 1 {
+        (v * (v - 1)) / 2
+    } else {
+        0
+    }
 }
 test! {
+    include_str!("d1_in.txt") => include_str!("d1_out.txt"),
+    include_str!("d2_in.txt") => include_str!("d2_out.txt"),
+    include_str!("d3_in.txt") => include_str!("d3_out.txt"),
+    include_str!("d4_in.txt") => include_str!("d4_out.txt"),
 }
