@@ -93,7 +93,4 @@ fn solve(src: &str) -> String {
     let r = (a.pow(2) as f64 + b.pow(2) as f64 - ((2 * a * b) as f64 * rad.cos())).sqrt();
     r.to_string()
 }
-test! {
-    "3 4 9 0" => "5.00000000000000000000",
-    "3 4 10 40" => "4.56425719433005567605",
-}
+test! {}
