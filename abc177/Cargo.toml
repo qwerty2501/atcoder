@@ -1,0 +1,12 @@
+[package]
+name = "abc177"
+version = "0.1.0"
+authors = ["qwerty2501 <qwerty2501@live.jp>"]
+edition = "2018"
+
+# dependencies added to new project
+[dependencies]
+
+[profile.release]
+lto = true
+panic = 'abort'
