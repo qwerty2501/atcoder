@@ -129,7 +129,6 @@ fn solve<W: std::io::Write>(src: &str, out: &mut W) {
         t:usize,
         s:usize,
     }
-    let v = d / s;
-    out!(to_yesno(v < t || (v == t && d % s == 0)));
+    out!(to_yesno(d <= t * s));
 }
 test! {}
