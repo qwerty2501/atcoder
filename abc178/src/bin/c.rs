@@ -127,18 +127,22 @@ fn solve<W: std::io::Write>(src: &str, out: &mut W) {
         source = src,
         n:usize,
     }
-    const M: usize = 1000000007;
-    let mut ans = 0;
-    if n > 1 {
-        ans = (n * (n - 1)) % M;
-        let rem = n - 2;
-
-        for _ in 1..=rem {
-            ans = (ans * 10) % M;
-        }
-    }
+    let mut ans = pow_mod(10, n);
+    ans += pow_mod(8, n);
+    ans -= (pow_mod(9, n) * 2) % M;
+    ans = (M + ans) % M;
     out!(ans);
 }
+
+const M: usize = 1000000007;
+fn pow_mod(v: usize, p: usize) -> usize {
+    let mut r = 1;
+    for _ in 0..p {
+        r = (r * v) % M;
+    }
+    r
+}
+
 test! {
     "3" => "60",
     "4" => "1200",
