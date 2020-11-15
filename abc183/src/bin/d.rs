@@ -126,26 +126,19 @@ fn solve<W: std::io::Write>(src: &str, out: &mut W) {
     input! {
         source = src,
         n:usize,
-        a_s:[isize;n],
+        w:usize,
+        stps:[(usize,usize,usize);n],
+    }
+    let mut rmap = HashMap::new();
+    for &(s, t, p) in stps.iter() {
+        let r = *rmap.get(&s).unwrap_or(&(usize::MAX, 0));
+        let a = r.1 + p;
+        if a > w {
+            out!("No");
+        }
+        rmap.insert(s, (min(r.0, t - 1), a));
     }
 
-    let mut sums = vec![a_s[0]];
-    let mut peaks = vec![a_s[0]];
-    for i in 1..a_s.len() {
-        sums.push(a_s[i] + sums[i - 1]);
-        peaks.push(max(peaks[i - 1], a_s[i] + peaks[i - 1]));
-    }
-
-    let mut ans = 0;
-    let mut x = 0;
-    for i in 0..a_s.len() {
-        ans = max(ans, x + peaks[i]);
-        x += sums[i];
-    }
-
-    if ans < 0 {
-        ans = 0;
-    }
-    out!(ans);
+    out!("Yes");
 }
 test! {}

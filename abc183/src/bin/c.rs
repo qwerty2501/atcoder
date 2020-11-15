@@ -126,26 +126,39 @@ fn solve<W: std::io::Write>(src: &str, out: &mut W) {
     input! {
         source = src,
         n:usize,
-        a_s:[isize;n],
+        k:usize,
+        tss:[[usize;n];n],
     }
-
-    let mut sums = vec![a_s[0]];
-    let mut peaks = vec![a_s[0]];
-    for i in 1..a_s.len() {
-        sums.push(a_s[i] + sums[i - 1]);
-        peaks.push(max(peaks[i - 1], a_s[i] + peaks[i - 1]));
-    }
-
-    let mut ans = 0;
-    let mut x = 0;
-    for i in 0..a_s.len() {
-        ans = max(ans, x + peaks[i]);
-        x += sums[i];
-    }
-
-    if ans < 0 {
-        ans = 0;
-    }
+    let ans = dns(&tss, vec![false; n], 0, 0, n, k, 0);
     out!(ans);
+}
+fn dns(
+    tss: &[Vec<usize>],
+    route_log: Vec<bool>,
+    i: usize,
+    c: usize,
+    n: usize,
+    k: usize,
+    r: usize,
+) -> usize {
+    if c >= n - 1 {
+        let r = r + tss[i][0];
+        if r == k {
+            1
+        } else {
+            0
+        }
+    } else {
+        let mut ans = 0;
+        for j in 1..n {
+            if !route_log[j] {
+                let next_r = r + tss[i][j];
+                let mut next_route_log = route_log.clone();
+                next_route_log[j] = true;
+                ans += dns(tss, next_route_log, j, c + 1, n, k, next_r);
+            }
+        }
+        ans
+    }
 }
 test! {}
